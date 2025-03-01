@@ -26,6 +26,8 @@ Route::get('/delete/{id}', [ToDoController::class, 'destroy'])->where('id', '[0-
 
 Route::get('/complete/{id}', [ToDoController::class, 'complete'])->where('id', '[0-9]+');
 
-Route::get('/destroy', function () {
+Route::post('/', [ToDoController::class, 'search']);
+
+Route::get('/d', function () {
     session()->flush();
 });

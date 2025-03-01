@@ -1,5 +1,12 @@
+@if(!isset($sr))
+    <?php $sr = false ?>
+@endif
+@if(!isset($tasks))
+    <?php redirect('/create'); ?>
+@endif
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <link rel="stylesheet" href="{{ asset('css/styles.css') }}">
     <meta charset="UTF-8">
@@ -13,7 +20,14 @@
     <div class="d-flex justify-content-between mb-3">
         <a href="/create" class="btn btn-primary">Add New Task</a>
     </div>
-    @dd($tasks)
+    <form class="search-form" action="" method="post" autocomplete="off">
+        @csrf
+        <input type="text" class="form-control" placeholder="Search tasks..." name="search">
+        <button type="submit" class="btn btn-info">Search</button>
+        @if($sr)
+            <button type="button" class="btn btn-danger" onclick="location.href='/';">Cancel search</button>
+        @endif
+    </form>
     <table class="table table-striped">
         <thead>
         <tr>
@@ -25,16 +39,33 @@
         </thead>
         <tbody>
         @foreach($tasks as $task)
-        <tr>
-            <td>{{ $task['name'] }}</td>
-            <td>{{ $task['description'] }}</td>
-            <td><span class="badge bg-success">Completed</span></td>
-            <td>
-                <a href="/edit/{{ $task['id'] }}" class="btn btn-sm btn-warning">Edit</a>
-                <a href="/delete/{{ $task['id'] }}" class="btn btn-sm btn-danger">delete</a>
-                <a href="/complete/{{ $task['id'] }}" class="btn btn-sm btn-success">Complete!</a>
-            </td>
-        </tr>
+            <tr>
+                    <?php
+                    if ($task['status'] == 0) {
+                        $color = 'info';
+                        $color2 = 'success';
+                        $text = 'Not complete';
+                        $text2 = 'Complete!';
+                    } else {
+                        $color = 'success';
+                        $color2 = 'info';
+                        $text = 'Complete!';
+                        $text2 = 'Not complete';
+                    }
+                    ?>
+                <td>{{ $task['name'] }}</td>
+                <td>{{ $task['description'] }}</td>
+                <td>
+                    <span class="badge bg-{{$color}}">
+                        {{$text}}
+                    </span>
+                </td>
+                <td>
+                    <a href="/edit/{{ $task['id'] }}" class="btn btn-sm btn-warning">Edit</a>
+                    <a href="/delete/{{ $task['id'] }}" class="btn btn-sm btn-danger">delete</a>
+                    <a href="/complete/{{ $task['id'] }}" class="btn btn-sm btn-{{ $color2 }}">{{$text2}}</a>
+                </td>
+            </tr>
         @endforeach
         </tbody>
     </table>
