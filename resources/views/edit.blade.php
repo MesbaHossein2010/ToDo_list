@@ -14,11 +14,11 @@
         @csrf
         <div class="mb-3">
             <label for="taskName" class="form-label">Task Name</label>
-            <input type="text" class="form-control" id="taskName" value="{{ $task['name'] }}" required>
+            <input type="text" class="form-control" name="name" id="taskName" value="{{ $task['name'] }}" required>
         </div>
         <div class="mb-3">
             <label for="taskDescription" class="form-label">Description</label>
-            <textarea class="form-control" id="taskDescription" rows="3" required>{{ $task['description'] }}</textarea>
+            <textarea class="form-control" id="taskDescription" name="description" rows="3" required>{{ $task['description'] }}</textarea>
         </div>
         <button type="submit" class="btn btn-primary">Update</button>
         <a href="/" class="btn btn-secondary">Cancel</a>

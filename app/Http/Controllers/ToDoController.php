@@ -62,25 +62,34 @@ class ToDoController extends Controller
         $description = $request->input('description');
         $tasks = $request->session()->get('tasks');
 
-        foreach($tasks as $task) {
+        foreach($tasks as &$task) {
             if ($task['id'] == $id) {
                 $task['name'] = $name;
                 $task['description'] = $description;
             }
         }
 
-//        dd($tasks);
-
-        session()->forget('tasks');
-
-        session()->push('tasks', $tasks);
+        $request->session()->forget('tasks');
+        $request->session()->put('tasks', $tasks);
 
         return redirect()->route('index');
     }
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy(string $id, Request $request)
+    {
+        $DTask = null;
+
+        foreach ($request->session()->get('tasks') as $task){
+            if($task['id'] == $id){
+                $DTask = $task;
+            }
+        }
+
+        dd($DTask);
+    }
+    public function complete(string $id)
     {
         //
     }

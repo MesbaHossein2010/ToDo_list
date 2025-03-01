@@ -13,11 +13,13 @@
     <div class="d-flex justify-content-between mb-3">
         <a href="/create" class="btn btn-primary">Add New Task</a>
     </div>
+    @dd($tasks)
     <table class="table table-striped">
         <thead>
         <tr>
             <th>Task Name</th>
             <th>Description</th>
+            <th>Status</th>
             <th>Actions</th>
         </tr>
         </thead>
@@ -26,9 +28,11 @@
         <tr>
             <td>{{ $task['name'] }}</td>
             <td>{{ $task['description'] }}</td>
+            <td><span class="badge bg-success">Completed</span></td>
             <td>
                 <a href="/edit/{{ $task['id'] }}" class="btn btn-sm btn-warning">Edit</a>
-                <a href="/delete/{{ $task['id'] }}" class="btn btn-sm btn-success">Complete!</a>
+                <a href="/delete/{{ $task['id'] }}" class="btn btn-sm btn-danger">delete</a>
+                <a href="/complete/{{ $task['id'] }}" class="btn btn-sm btn-success">Complete!</a>
             </td>
         </tr>
         @endforeach

@@ -24,6 +24,8 @@ Route::post('/edit/{id}', [ToDoController::class, 'update'])->where('id', '[0-9]
 
 Route::get('/delete/{id}', [ToDoController::class, 'destroy'])->where('id', '[0-9]+');
 
+Route::get('/complete/{id}', [ToDoController::class, 'complete'])->where('id', '[0-9]+');
+
 Route::get('/destroy', function () {
     session()->flush();
 });
