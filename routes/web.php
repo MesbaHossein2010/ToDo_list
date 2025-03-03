@@ -31,3 +31,7 @@ Route::post('/', [ToDoController::class, 'search']);
 Route::get('/d', function () {
     session()->flush();
 });
+
+Route::fallback(function (){
+    return view('fallback');
+});

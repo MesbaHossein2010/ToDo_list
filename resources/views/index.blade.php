@@ -40,30 +40,17 @@
         <tbody>
         @foreach($tasks as $task)
             <tr>
-                    <?php
-                    if ($task['status'] == 0) {
-                        $color = 'info';
-                        $color2 = 'success';
-                        $text = 'Not complete';
-                        $text2 = 'Complete!';
-                    } else {
-                        $color = 'success';
-                        $color2 = 'info';
-                        $text = 'Complete!';
-                        $text2 = 'Not complete';
-                    }
-                    ?>
                 <td>{{ $task['name'] }}</td>
                 <td>{{ $task['description'] }}</td>
                 <td>
-                    <span class="badge bg-{{$color}}">
-                        {{$text}}
+                    <span class="badge bg-{{ $task['status'] == 0? 'info':'success' }}">
+                        {{ $task['status'] == 0? 'Not completed':'Complete!' }}
                     </span>
                 </td>
                 <td>
                     <a href="/edit/{{ $task['id'] }}" class="btn btn-sm btn-warning">Edit</a>
                     <a href="/delete/{{ $task['id'] }}" class="btn btn-sm btn-danger">delete</a>
-                    <a href="/complete/{{ $task['id'] }}" class="btn btn-sm btn-{{ $color2 }}">{{$text2}}</a>
+                    <a href="/complete/{{ $task['id'] }}" class="btn btn-sm btn-{{ $task['status'] == 1? 'info':'success' }}">{{ $task['status'] == 1? 'Set as not completed':'Set as complete' }}</a>
                 </td>
             </tr>
         @endforeach
