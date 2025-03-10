@@ -1,10 +1,7 @@
-@if(!isset($sr))
-    <?php $sr = false ?>
+@if(!isset($search))
+    <?php $search = null ?>
 @endif
-@if(!isset($tasks))
-    <?php redirect('/create'); ?>
-@endif
-<!DOCTYPE html>
+    <!DOCTYPE html>
 <html lang="en">
 
 <head>
@@ -22,9 +19,12 @@
     </div>
     <form class="search-form" action="" method="post" autocomplete="off">
         @csrf
-        <input type="text" class="form-control" placeholder="Search tasks..." name="search">
-        <button type="submit" class="btn btn-info">Search</button>
-        @if($sr)
+        @if($search == null)
+            <input type="text" class="form-control" placeholder="Search tasks..." name="search">
+            <button type="submit" class="btn btn-info">Search</button>
+        @else
+            <input type="text" class="form-control" placeholder="Search tasks..." name="search" value="{{ $search }}">
+            <button type="submit" class="btn btn-info">Search</button>
             <button type="button" class="btn btn-danger" onclick="location.href='/';">Cancel search</button>
         @endif
     </form>
@@ -43,14 +43,15 @@
                 <td>{{ $task['name'] }}</td>
                 <td>{{ $task['description'] }}</td>
                 <td>
-                    <span class="badge bg-{{ $task['status'] == 0? 'info':'success' }}">
-                        {{ $task['status'] == 0? 'Not completed':'Complete!' }}
+                    <span class="badge bg-{{ $task['status'] == 'not completed'? 'info':'success' }}">
+                        {{ $task['status'] == 'not completed'? 'Not completed':'Completed!' }}
                     </span>
                 </td>
                 <td>
                     <a href="/edit/{{ $task['id'] }}" class="btn btn-sm btn-warning">Edit</a>
                     <a href="/delete/{{ $task['id'] }}" class="btn btn-sm btn-danger">delete</a>
-                    <a href="/complete/{{ $task['id'] }}" class="btn btn-sm btn-{{ $task['status'] == 1? 'info':'success' }}">{{ $task['status'] == 1? 'Set as not completed':'Set as complete' }}</a>
+                    <a href="/complete/{{ $task['id'] }}"
+                       class="btn btn-sm btn-{{ $task['status'] == 'completed'? 'info':'success' }}">{{ $task['status'] == 'completed'? 'Set as not completed':'Set as complete' }}</a>
                 </td>
             </tr>
         @endforeach

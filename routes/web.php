@@ -28,10 +28,6 @@ Route::get('/complete/{id}', [ToDoController::class, 'complete'])->where('id', '
 
 Route::post('/', [ToDoController::class, 'search']);
 
-Route::get('/d', function () {
-    session()->flush();
-});
-
 Route::fallback(function (){
     return view('fallback');
 });

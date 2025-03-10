@@ -4,7 +4,10 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\SearchRequest;
 use App\Http\Requests\StoreRequest;
+use App\Http\Requests\UpdateRequest;
+use App\Models\Task;
 use Illuminate\Http\Request;
+
 
 class ToDoController extends Controller
 {
@@ -13,8 +16,7 @@ class ToDoController extends Controller
      */
     public function index(Request $request)
     {
-        $tasks = $request->session()->get('tasks');
-        $tasks = collect($tasks)->sortBy('name');
+        $tasks = Task::orderBy('name')->get();
         return view('index', compact('tasks'));
     }
 
@@ -34,50 +36,39 @@ class ToDoController extends Controller
         $name = $request->input('name');
         $description = $request->input('description');
 
-        if ($request->session()->has('tasks')) {
-            $id = count($request->session()->get('tasks')) + 1;
-        } else {
-            $id = 1;
-        }
+        Task::create([
+            'name' => $name,
+            'description' => $description,
+        ]);
 
-        $task = ['id' => $id, 'name' => $name, 'description' => $description, 'status' => 0];
-
-        $request->session()->push('tasks', $task);
         return redirect()->route('index');
     }
 
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(string $id, Request $request)
+    public function edit(string $id)
     {
-        $tasks = $request->session()->get('tasks');
-        foreach ($tasks as $task) {
-            if ($task['id'] == $id) {
-                return view('edit', compact('task'));
-            }
+        $task = Task::find($id);
+        if (!empty($task)) {
+            return view('edit', compact('task'));
+        } else {
+            return redirect()->route('index');
         }
-        return redirect()->route('index');
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(UpdateRequest $request, string $id)
     {
         $name = $request->input('name');
         $description = $request->input('description');
-        $tasks = $request->session()->get('tasks');
 
-        foreach ($tasks as &$task) {
-            if ($task['id'] == $id) {
-                $task['name'] = $name;
-                $task['description'] = $description;
-            }
-        }
-
-        $request->session()->forget('tasks');
-        $request->session()->put('tasks', $tasks);
+        $task = Task::find($id);
+        $task->name = $name;
+        $task->description = $description;
+        $task->save();
 
         return redirect()->route('index');
     }
@@ -87,61 +78,31 @@ class ToDoController extends Controller
      */
     public function destroy(string $id, Request $request)
     {
-        $DTask = null;
-        $tasks = $request->session()->get('tasks');
+        $task = Task::find($id);
+        $task->delete();
 
-        foreach ($tasks as $task) {
-            if ($task['id'] == $id) {
-                $DTask = array_search($task, $tasks);
-            }
-        }
-
-        $request->session()->forget('tasks');
-        unset($tasks[$DTask]);
-        $request->session()->put('tasks', $tasks);
         return redirect()->route('index');
-
     }
 
-    public function complete(string $id, Request $request)
+    public function complete(string $id)
     {
-        $tasks = $request->session()->get('tasks');
-
-        foreach ($tasks as &$task) {
-            if ($task['id'] == $id) {
-                if ($task['status'] == 1) {
-                    $task['status'] = 0;
-                } else {
-                    $task['status'] = 1;
-                }
-            }
-        }
-
-        $request->session()->forget('tasks');
-        $request->session()->put('tasks', $tasks);
+        $task = Task::find($id);
+//        dd($task->status);
+        $task->status = $task->status == 'completed' ? '2' : '1';
+        $task->save();
 
         return redirect()->route('index');
     }
 
     public function search(SearchRequest $request)
     {
-        $tasks = $request->session()->get('tasks');
         $search = $request->input('search');
-        $sr = true;
 
-        $tasks = array_filter($tasks, function ($task) use ($search) {
-            $InSearch = null;
-            if (stripos($task['name'], $search)) {
-                return true;
-            } else {
-                if (stripos($task['description'], $search)) {
-                    return true;
-                }else{
-                    return false;
-                }
-            }
-        });
+        // Search tasks in DB where name or description contains the search keyword (case-insensitive)
+        $tasks = Task::where('name', 'like', '%' . $search . '%')
+            ->orWhere('description', 'like', '%' . $search . '%')
+            ->get(); // Get the results
 
-        return view('index', compact('tasks', 'sr'));
+        return view('index', compact('tasks', 'search'));
     }
 }
