@@ -7,6 +7,7 @@ use App\Http\Requests\StoreRequest;
 use App\Http\Requests\UpdateRequest;
 use App\Models\Task;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 
 class ToDoController extends Controller
@@ -14,9 +15,10 @@ class ToDoController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index(Request $request)
+    public function index()
     {
         $tasks = Task::orderBy('name')->get();
+//        $tasks = DB::table("tasks")->get();
         return view('index', compact('tasks'));
     }
 
@@ -38,8 +40,13 @@ class ToDoController extends Controller
 
         Task::create([
             'name' => $name,
-            'description' => $description,
+            'description' => $description
         ]);
+
+//        DB::table("tasks")->insert([
+//            'name' => $name,
+//            'description' => $description
+//        ]);
 
         return redirect()->route('index');
     }
@@ -55,6 +62,11 @@ class ToDoController extends Controller
         } else {
             return redirect()->route('index');
         }
+
+//        $task = DB::table('tasks')->select('*')->where('id', $id)->get();
+//        $task = $task[0];
+//        return view('edit', compact('task'));
+
     }
 
     /**
@@ -70,6 +82,11 @@ class ToDoController extends Controller
         $task->description = $description;
         $task->save();
 
+//        DB::table("tasks")->where('id', $id)->update([
+//            'name' => $name,
+//            'description' => $description
+//        ]);
+
         return redirect()->route('index');
     }
 
@@ -81,15 +98,22 @@ class ToDoController extends Controller
         $task = Task::find($id);
         $task->delete();
 
+//        DB::table("tasks")->where('id', $id)->delete();
+
         return redirect()->route('index');
     }
 
     public function complete(string $id)
     {
         $task = Task::find($id);
-//        dd($task->status);
         $task->status = $task->status == 'completed' ? '2' : '1';
         $task->save();
+
+//        $task = DB::table('tasks')->select('status')->where('id', $id)->get();
+//        $task = $task[0]->status == 'completed'? 'not completed': 'completed';
+//        DB::table("tasks")->where('id', $id)->update([
+//            'status' => "$task"
+//        ]);
 
         return redirect()->route('index');
     }
@@ -98,11 +122,17 @@ class ToDoController extends Controller
     {
         $search = $request->input('search');
 
-        // Search tasks in DB where name or description contains the search keyword (case-insensitive)
         $tasks = Task::where('name', 'like', '%' . $search . '%')
             ->orWhere('description', 'like', '%' . $search . '%')
-            ->get(); // Get the results
+            ->get();
+
+//        $tasks = DB::table("tasks")->where('name', 'like', '%' . $search . '%')->get();
 
         return view('index', compact('tasks', 'search'));
+    }
+
+    public function d()
+    {
+        Task::query()->truncate();
     }
 }

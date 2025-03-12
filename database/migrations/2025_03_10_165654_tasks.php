@@ -17,6 +17,7 @@ return new class extends Migration
             $table->text('description');     // Content column (text)
             $table->enum('status', ['completed', 'not completed'])->default('not completed');     // Content column (text)
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

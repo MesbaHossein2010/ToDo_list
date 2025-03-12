@@ -25,7 +25,7 @@
         @else
             <input type="text" class="form-control" placeholder="Search tasks..." name="search" value="{{ $search }}">
             <button type="submit" class="btn btn-info">Search</button>
-            <button type="button" class="btn btn-danger" onclick="location.href='/';">Cancel search</button>
+            <button type="button" class="btn btn-sm btn-danger" onclick="location.href='/';">Cancel search</button>
         @endif
     </form>
     <table class="table table-striped">
@@ -40,18 +40,18 @@
         <tbody>
         @foreach($tasks as $task)
             <tr>
-                <td>{{ $task['name'] }}</td>
-                <td>{{ $task['description'] }}</td>
+                <td>{{ $task->name }}</td>
+                <td>{{ $task->description }}</td>
                 <td>
-                    <span class="badge bg-{{ $task['status'] == 'not completed'? 'info':'success' }}">
-                        {{ $task['status'] == 'not completed'? 'Not completed':'Completed!' }}
+                    <span class="badge bg-{{ $task->status == 'not completed'? 'info':'success' }}">
+                        {{ $task->status == 'not completed'? 'Not completed':'Completed!' }}
                     </span>
                 </td>
                 <td>
-                    <a href="/edit/{{ $task['id'] }}" class="btn btn-sm btn-warning">Edit</a>
-                    <a href="/delete/{{ $task['id'] }}" class="btn btn-sm btn-danger">delete</a>
-                    <a href="/complete/{{ $task['id'] }}"
-                       class="btn btn-sm btn-{{ $task['status'] == 'completed'? 'info':'success' }}">{{ $task['status'] == 'completed'? 'Set as not completed':'Set as complete' }}</a>
+                    <a href="/edit/{{ $task->id }}" class="btn btn-sm btn-warning">Edit</a>
+                    <a href="/delete/{{ $task->id }}" class="btn btn-sm btn-danger">delete</a>
+                    <a href="/complete/{{ $task->id }}"
+                       class="btn btn-sm btn-{{ $task->status == 'completed'? 'info':'success' }}">{{ $task->status == 'completed'? 'Set as not completed':'Set as complete' }}</a>
                 </td>
             </tr>
         @endforeach
