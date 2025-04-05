@@ -1,5 +1,6 @@
 <?php
 
+use Database\Seeders\TaskSeeder;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ToDoController;
 
@@ -29,7 +30,11 @@ Route::get('/complete/{id}', [ToDoController::class, 'complete'])->where('id', '
 Route::post('/', [ToDoController::class, 'search']);
 
 Route::get('/d', [ToDoController::class, 'd']);
+Route::get('/c/{num}', [TaskSeeder::class, 'run'])->where('id', '[0-9]+');
 
 Route::fallback(function (){
     return view('fallback');
 });
+
+
+Route::get('/test', [ToDoController::class, 'test']);

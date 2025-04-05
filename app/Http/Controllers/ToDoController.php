@@ -6,6 +6,7 @@ use App\Http\Requests\SearchRequest;
 use App\Http\Requests\StoreRequest;
 use App\Http\Requests\UpdateRequest;
 use App\Models\Task;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -17,7 +18,7 @@ class ToDoController extends Controller
      */
     public function index()
     {
-        $tasks = Task::orderBy('name')->get();
+        $tasks = Task::orderBy('name')->where('deleted_at', null)->get();
 //        $tasks = DB::table("tasks")->get();
         return view('index', compact('tasks'));
     }
@@ -87,7 +88,7 @@ class ToDoController extends Controller
 //            'description' => $description
 //        ]);
 
-        return redirect()->route('index');
+        return redirect()->back();
     }
 
     /**
@@ -96,11 +97,12 @@ class ToDoController extends Controller
     public function destroy(string $id, Request $request)
     {
         $task = Task::find($id);
-        $task->delete();
+        $task->deleted_at = now();
+        $task->save();
 
 //        DB::table("tasks")->where('id', $id)->delete();
 
-        return redirect()->route('index');
+        return redirect()->back();
     }
 
     public function complete(string $id)
@@ -121,7 +123,6 @@ class ToDoController extends Controller
     public function search(SearchRequest $request)
     {
         $search = $request->input('search');
-
         $tasks = Task::where('name', 'like', '%' . $search . '%')
             ->orWhere('description', 'like', '%' . $search . '%')
             ->get();
@@ -134,5 +135,13 @@ class ToDoController extends Controller
     public function d()
     {
         Task::query()->truncate();
+
+        return redirect()->route('index');
+    }
+
+    public function test()
+    {
+        $task = Task::find(1);
+        return $task->phone ;
     }
 }

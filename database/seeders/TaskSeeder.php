@@ -5,19 +5,16 @@ namespace Database\Seeders;
 use App\Models\Task;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Str;
 
 class TaskSeeder extends Seeder
 {
     /**
      * Run the database seeds.
      */
-    public function run(): void
+    public function run($num)
     {
-        for ($i = 1; $i <= 100; $i++) {
-            Task::create([
-                'name' => $i,
-                'description' => $i
-            ]);
-        }
+        Task::factory()->count($num)->create();
+        return redirect()->route('index');
     }
 }

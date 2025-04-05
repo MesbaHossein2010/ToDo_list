@@ -5,14 +5,12 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Task extends Model
+class Phone extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['name', 'description', 'status'];
-
-    public function Phone()
+    public function Task()
     {
-        $this->hasOne(Phone::class);
+        $this->belongsTo(Task::class);
     }
 }

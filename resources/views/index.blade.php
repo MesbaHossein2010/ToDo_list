@@ -17,6 +17,12 @@
     <div class="d-flex justify-content-between mb-3">
         <a href="/create" class="btn btn-primary">Add New Task</a>
     </div>
+
+    <!-- Display number of results -->
+    <div class="mb-3">
+        <strong>Number of results: {{ count($tasks) }}</strong>
+    </div>
+
     <form class="search-form" action="" method="post" autocomplete="off">
         @csrf
         @if($search == null)
@@ -28,6 +34,7 @@
             <button type="button" class="btn btn-sm btn-danger" onclick="location.href='/';">Cancel search</button>
         @endif
     </form>
+
     <table class="table table-striped">
         <thead>
         <tr>
@@ -49,7 +56,7 @@
                 </td>
                 <td>
                     <a href="/edit/{{ $task->id }}" class="btn btn-sm btn-warning">Edit</a>
-                    <a href="/delete/{{ $task->id }}" class="btn btn-sm btn-danger">delete</a>
+                    <a href="/delete/{{ $task->id }}" class="btn btn-sm btn-danger">Delete</a>
                     <a href="/complete/{{ $task->id }}"
                        class="btn btn-sm btn-{{ $task->status == 'completed'? 'info':'success' }}">{{ $task->status == 'completed'? 'Set as not completed':'Set as complete' }}</a>
                 </td>
