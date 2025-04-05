@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\SearchRequest;
 use App\Http\Requests\StoreRequest;
 use App\Http\Requests\UpdateRequest;
+use App\Models\Phone;
 use App\Models\Task;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -28,7 +29,7 @@ class ToDoController extends Controller
      */
     public function create()
     {
-        return view('creat');
+        return view('task.creat');
     }
 
     /**
@@ -59,7 +60,7 @@ class ToDoController extends Controller
     {
         $task = Task::find($id);
         if (!empty($task)) {
-            return view('edit', compact('task'));
+            return view('task.edit', compact('task'));
         } else {
             return redirect()->route('index');
         }
@@ -141,7 +142,7 @@ class ToDoController extends Controller
 
     public function test()
     {
-        $task = Task::find(1);
-        return $task->phone ;
+        $tasks = Task::all();
+        dd($tasks[3]->categories);
     }
 }

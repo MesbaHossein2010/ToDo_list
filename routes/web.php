@@ -30,7 +30,7 @@ Route::get('/complete/{id}', [ToDoController::class, 'complete'])->where('id', '
 Route::post('/', [ToDoController::class, 'search']);
 
 Route::get('/d', [ToDoController::class, 'd']);
-Route::get('/c/{num}', [TaskSeeder::class, 'run'])->where('id', '[0-9]+');
+Route::get('/c/{num}', [TaskSeeder::class, 'run'])->where('num', '[0-9]+');
 
 Route::fallback(function (){
     return view('fallback');

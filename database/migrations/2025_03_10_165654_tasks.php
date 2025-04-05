@@ -16,7 +16,7 @@ return new class extends Migration
             $table->string('name');     // Title column (varchar)
             $table->text('description');     // Content column (text)
             $table->enum('status', ['completed', 'not completed'])->default('not completed');     // Content column (text)
-            $table->integer('Phone_id')->nullable();
+            $table->integer('phone_id')->nullable();
             $table->timestamps();
             $table->softDeletes();
         });

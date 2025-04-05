@@ -11,8 +11,13 @@ class Task extends Model
 
     protected $fillable = ['name', 'description', 'status'];
 
-    public function Phone()
+    public function phone()
     {
-        $this->hasOne(Phone::class);
+        return $this->belongsTo(Phone::class);
+    }
+
+    public function categories()
+    {
+        return $this->belongsToMany(Category::class);
     }
 }
