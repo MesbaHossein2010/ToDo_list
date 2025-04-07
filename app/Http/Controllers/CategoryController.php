@@ -2,6 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\CatStoreRequest;
+use App\Http\Requests\CatUpdateRequest;
+use App\Models\Category;
 use Illuminate\Http\Request;
 
 class CategoryController extends Controller
@@ -11,7 +14,8 @@ class CategoryController extends Controller
      */
     public function index()
     {
-        //
+        $categories = Category::orderBy('name')->where('deleted_at', null)->get();
+        return view('category.index', compact('categories'));
     }
 
     /**
@@ -19,23 +23,19 @@ class CategoryController extends Controller
      */
     public function create()
     {
-        //
+        return view('category.create');
     }
 
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(CatStoreRequest $request)
     {
-        //
-    }
+        $name = $request->input('name');
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
-    {
-        //
+        Category::create([
+            'name' => $name,
+        ]);
     }
 
     /**
@@ -43,15 +43,24 @@ class CategoryController extends Controller
      */
     public function edit(string $id)
     {
-        //
+        $category = Category::find($id);
+        if (!empty($category)) {
+            return view('category.edit', compact('category'));
+        } else {
+            return redirect()->route('index');
+        }
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(CatUpdateRequest $request, string $id)
     {
-        //
+        $name = $request->input('name');
+
+        $category = Category::find($id);
+        $category->name = $name;
+        $category->save();
     }
 
     /**
@@ -59,6 +68,15 @@ class CategoryController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        $category = Category::find($id);
+        $category->deleted_at = now();
+        $category->save();
+        return redirect()->back();
+    }
+    public function d()
+    {
+        Category::query()->truncate();
+
+        return redirect()->route('index');
     }
 }

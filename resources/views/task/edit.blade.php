@@ -8,20 +8,44 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
 </head>
 <body>
-<div class="container mt-5">
-    <h1 class="text-center mb-4">Edit Task</h1>
-    <form method="post" autocomplete="off">
+<div class="container">
+    <h1>Edit Task</h1>
+
+    <form action="/" method="POST">
         @csrf
-        <div class="mb-3">
-            <label for="taskName" class="form-label">Task Name</label>
-            <input type="text" class="form-control" name="name" id="taskName" value="{{ $task->name }}" required>
+        <div class="mb-4">
+            <label for="name" class="form-label">Task Name*</label>
+            <input type="text" class="form-control" id="name" name="name"
+                   value="{{ old('name', $task->name) }}" required>
         </div>
-        <div class="mb-3">
-            <label for="taskDescription" class="form-label">Description</label>
-            <textarea class="form-control" id="taskDescription" name="description" rows="3" required>{{ $task->description }}</textarea>
+
+        <div class="mb-4">
+            <label for="description" class="form-label">Description</label>
+            <textarea class="form-control" id="description" name="description"
+                      rows="4">{{ old('description', $task->description) }}</textarea>
         </div>
-        <button type="submit" class="btn btn-primary">Update</button>
-        <a href="/" class="btn btn-secondary">Cancel</a>
+
+        <div class="mb-4">
+            <label class="form-label">Categories</label>
+            <div class="category-checkboxes">
+                @foreach($categories as $category)
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox"
+                               name="categories" value="{{ $category->id }}"
+                               id="cat-{{ $category->id }}"
+                            {{ $task->categories->contains($category->id) ? 'checked' : '' }}>
+                        <label class="form-check-label" for="cat-{{ $category->id }}">
+                            {{ $category->name }}
+                        </label>
+                    </div>
+                @endforeach
+            </div>
+        </div>
+
+        <div class="d-flex justify-content-between mt-5">
+            <a href="/" class="btn btn-outline-secondary">Cancel</a>
+            <button type="submit" class="btn btn-primary">Update Task</button>
+        </div>
     </form>
 </div>
 </body>

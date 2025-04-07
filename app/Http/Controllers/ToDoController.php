@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\SearchRequest;
 use App\Http\Requests\StoreRequest;
 use App\Http\Requests\UpdateRequest;
+use App\Models\Category;
 use App\Models\Phone;
 use App\Models\Task;
 use App\Models\User;
@@ -20,8 +21,8 @@ class ToDoController extends Controller
     public function index()
     {
         $tasks = Task::orderBy('name')->where('deleted_at', null)->get();
-//        $tasks = DB::table("tasks")->get();
         return view('index', compact('tasks'));
+//        $tasks = DB::table("tasks")->get();
     }
 
     /**
@@ -29,7 +30,8 @@ class ToDoController extends Controller
      */
     public function create()
     {
-        return view('task.creat');
+        $categories = Category::all();
+        return view('task.create', compact('categories'));
     }
 
     /**
@@ -39,6 +41,8 @@ class ToDoController extends Controller
     {
         $name = $request->input('name');
         $description = $request->input('description');
+        $categories = $request->input('categories');
+        dd($categories);
 
         Task::create([
             'name' => $name,
@@ -58,9 +62,11 @@ class ToDoController extends Controller
      */
     public function edit(string $id)
     {
+        $categories = Category::all();
         $task = Task::find($id);
+
         if (!empty($task)) {
-            return view('task.edit', compact('task'));
+            return view('task.edit', compact('task', 'categories'));
         } else {
             return redirect()->route('index');
         }
@@ -78,6 +84,8 @@ class ToDoController extends Controller
     {
         $name = $request->input('name');
         $description = $request->input('description');
+        $categories = $request->input('categories');
+        dd($categories);
 
         $task = Task::find($id);
         $task->name = $name;
@@ -95,7 +103,7 @@ class ToDoController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id, Request $request)
+    public function destroy(string $id)
     {
         $task = Task::find($id);
         $task->deleted_at = now();
@@ -137,12 +145,11 @@ class ToDoController extends Controller
     {
         Task::query()->truncate();
 
-        return redirect()->route('index');
+        return redirect()->route('dd');
     }
 
     public function test()
     {
-        $tasks = Task::all();
-        dd($tasks[3]->categories);
+
     }
 }
