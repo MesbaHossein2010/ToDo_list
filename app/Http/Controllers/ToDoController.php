@@ -42,17 +42,13 @@ class ToDoController extends Controller
         $name = $request->input('name');
         $description = $request->input('description');
         $categories = $request->input('categories');
-        dd($categories);
 
-        Task::create([
+        $task = Task::create([
             'name' => $name,
             'description' => $description
         ]);
 
-//        DB::table("tasks")->insert([
-//            'name' => $name,
-//            'description' => $description
-//        ]);
+        $task->categories()->attach($categories);
 
         return redirect()->route('index');
     }
@@ -85,17 +81,14 @@ class ToDoController extends Controller
         $name = $request->input('name');
         $description = $request->input('description');
         $categories = $request->input('categories');
+
         dd($categories);
 
         $task = Task::find($id);
         $task->name = $name;
         $task->description = $description;
+        $task->categories()->sync($categories);
         $task->save();
-
-//        DB::table("tasks")->where('id', $id)->update([
-//            'name' => $name,
-//            'description' => $description
-//        ]);
 
         return redirect()->back();
     }

@@ -16,13 +16,13 @@
         <div class="mb-4">
             <label for="name" class="form-label">Task Name*</label>
             <input type="text" class="form-control" id="name" name="name"
-                   value="{{ old('name', $task->name) }}" required>
+                   value="{{ $task->name }}" required>
         </div>
 
         <div class="mb-4">
             <label for="description" class="form-label">Description</label>
             <textarea class="form-control" id="description" name="description"
-                      rows="4">{{ old('description', $task->description) }}</textarea>
+                      rows="4">{{  $task->description }}</textarea>
         </div>
 
         <div class="mb-4">
@@ -31,7 +31,7 @@
                 @foreach($categories as $category)
                     <div class="form-check">
                         <input class="form-check-input" type="checkbox"
-                               name="categories" value="{{ $category->id }}"
+                               name="categories[]" value="{{ $category->id }}"
                                id="cat-{{ $category->id }}"
                             {{ $task->categories->contains($category->id) ? 'checked' : '' }}>
                         <label class="form-check-label" for="cat-{{ $category->id }}">
