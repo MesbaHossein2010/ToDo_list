@@ -26,7 +26,7 @@ Route::get('/create', [ToDoController::class, 'create']);
 Route::post('/create', [ToDoController::class, 'store']);
 
 Route::get('/edit/{id}', [ToDoController::class, 'edit'])->where('id', '[0-9]+');
-Route::post('/edit/{id}', [ToDoController::class, 'update'])->where('id', '[0-9]+');
+Route::post('/edit/{id}', [ToDoController::class, 'update']);
 
 Route::get('/delete/{id}', [ToDoController::class, 'destroy'])->where('id', '[0-9]+');
 

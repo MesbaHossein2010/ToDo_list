@@ -13,7 +13,7 @@ class CategorySeeder extends Seeder
      */
     public function run($num)
     {
-        Category::factory()->count($num/2)->create();
+        Category::factory()->count($num/4)->create();
         return redirect()->route('ccc');
     }
 }

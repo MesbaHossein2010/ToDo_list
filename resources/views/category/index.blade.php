@@ -12,6 +12,7 @@
     <h1>Category List</h1>
     <div class="d-flex justify-content-between mb-4">
         <a href="/categories/create" class="btn btn-primary">Add New Category</a>
+        <a href="/" class="btn btn-primary">Tasks</a>
     </div>
 
     <table class="table table-striped">

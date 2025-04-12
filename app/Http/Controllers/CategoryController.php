@@ -70,6 +70,7 @@ class CategoryController extends Controller
     {
         $category = Category::find($id);
         $category->deleted_at = now();
+        $category->tasks()->detach();
         $category->save();
         return redirect()->back();
     }

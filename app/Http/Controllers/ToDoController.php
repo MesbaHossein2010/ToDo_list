@@ -82,15 +82,13 @@ class ToDoController extends Controller
         $description = $request->input('description');
         $categories = $request->input('categories');
 
-        dd($categories);
-
         $task = Task::find($id);
         $task->name = $name;
         $task->description = $description;
         $task->categories()->sync($categories);
         $task->save();
 
-        return redirect()->back();
+        return redirect()->route('index');
     }
 
     /**

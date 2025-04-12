@@ -15,6 +15,7 @@
     <h1>My To-Do List</h1>
     <div class="d-flex justify-content-between mb-4">
         <a href="/create" class="btn btn-primary">Add New Task</a>
+        <a href="/categories" class="btn btn-primary">categories</a>
     </div>
 
     <div class="mb-3">
