@@ -19,13 +19,23 @@
         <thead>
         <tr>
             <th>Name</th>
+            <th>Tasks</th>
             <th>Actions</th>
         </tr>
         </thead>
         <tbody>
         @foreach($categories as $category)
-            <tr> <!-- No special row class -->
+            <tr>
                 <td>{{ $category->name }}</td>
+                <td class="task-categories align-middle">
+                    <br>
+                    <br>
+                    @foreach($category->tasks as $CatTask)
+                        <span class="badge bg-secondary">{{ $CatTask['name'] }}</span>
+                    @endforeach
+                    <br>
+                    <br>
+                </td>
                 <td>
                     <div class="d-flex gap-2">
                         <a href="/categories/edit/{{ $category->id }}" class="btn btn-sm btn-warning">Edit</a>
