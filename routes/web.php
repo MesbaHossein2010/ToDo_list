@@ -52,7 +52,7 @@ Route::get('/test', [ToDoController::class, 'test']);
 
 //Categories
 Route::prefix('/categories')->group(function () {
-    Route::get('/', [CategoryController::class, 'index'])->name('Category.index');
+    Route::get('/', [CategoryController::class, 'index'])->name('category.index');
 
     Route::get('/create', [CategoryController::class, 'create']);
     Route::post('/create', [CategoryController::class, 'store']);
@@ -62,3 +62,4 @@ Route::prefix('/categories')->group(function () {
 
     Route::get('/delete/{id}', [CategoryController::class, 'destroy'])->where('id', '[0-9]+');
 });
+//categories end

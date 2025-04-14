@@ -15,7 +15,7 @@ class Category_taskSeeder extends Seeder
      */
     public function run()
     {
-        for ($i = 0; $i < Task::all()->count()*2; $i++) {
+        for ($i = 0; $i < Task::all()->count()*4; $i++) {
             DB::table('category_task')->insert([
                 'category_id' => rand(1, Category::all()->count()),
                 'task_id' => rand(1, Task::all()->count()),

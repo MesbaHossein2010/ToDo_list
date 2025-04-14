@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\CatStoreRequest;
 use App\Http\Requests\CatUpdateRequest;
 use App\Models\Category;
+use App\Models\Task;
 use Illuminate\Http\Request;
 
 class CategoryController extends Controller
@@ -23,7 +24,8 @@ class CategoryController extends Controller
      */
     public function create()
     {
-        return view('category.create');
+        $tasks = Task::all();
+        return view('category.create', compact('tasks'));
     }
 
     /**
@@ -32,10 +34,15 @@ class CategoryController extends Controller
     public function store(CatStoreRequest $request)
     {
         $name = $request->input('name');
+        $tasks = $request->input('tasks');
+//        dd($tasks);
 
-        Category::create([
+        $cat = Category::create([
             'name' => $name,
         ]);
+
+        $cat->tasks()->sync($tasks);
+        return redirect()->route('category.index');
     }
 
     /**
@@ -43,9 +50,10 @@ class CategoryController extends Controller
      */
     public function edit(string $id)
     {
+        $tasks = Task::all();
         $category = Category::find($id);
         if (!empty($category)) {
-            return view('category.edit', compact('category'));
+            return view('category.edit', compact('category', 'tasks'));
         } else {
             return redirect()->route('index');
         }
@@ -57,10 +65,14 @@ class CategoryController extends Controller
     public function update(CatUpdateRequest $request, string $id)
     {
         $name = $request->input('name');
+        $tasks = $request->input('tasks');
 
         $category = Category::find($id);
         $category->name = $name;
+        $category->tasks()->sync($tasks);
         $category->save();
+
+        return redirect()->route('category.index');
     }
 
     /**

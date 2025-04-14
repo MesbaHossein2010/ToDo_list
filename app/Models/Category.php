@@ -13,4 +13,6 @@ class Category extends Model
     {
         return $this->belongsToMany(Task::class);
     }
+
+    protected $fillable = ['name'];
 }

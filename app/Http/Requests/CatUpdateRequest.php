@@ -23,6 +23,7 @@ class CatUpdateRequest extends FormRequest
     {
         return [
             'name' => 'required|string|max:100',
+            'tasks' => 'required|array|min:1',
         ];
     }
 }
