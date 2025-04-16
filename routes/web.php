@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CategoryController;
 use Database\Seeders\Category_taskSeeder;
 use Database\Seeders\Category_taskSeeder as Category_taskSeederAlias;
@@ -50,7 +51,7 @@ Route::fallback(function () {
 Route::get('/test', [ToDoController::class, 'test']);
 //settings end
 
-//Categories
+//categories
 Route::prefix('/categories')->group(function () {
     Route::get('/', [CategoryController::class, 'index'])->name('category.index');
 
@@ -63,3 +64,13 @@ Route::prefix('/categories')->group(function () {
     Route::get('/delete/{id}', [CategoryController::class, 'destroy'])->where('id', '[0-9]+');
 });
 //categories end
+
+//auth
+Route::prefix('/auth')->group(function () {
+    Route::get('/login', [AuthController::class, 'showLogin'])->name('auth.login');
+    Route::post('/login', [AuthController::class, 'login']);
+    Route::get('/register', [AuthController::class, 'showRegister'])->name('auth.register');
+    Route::post('/register', [AuthController::class, 'register']);
+    Route::get('/logout', [AuthController::class, 'logout'])->name('auth.logout');
+});
+//end auth

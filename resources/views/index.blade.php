@@ -1,7 +1,7 @@
 @if(!isset($search))
 {{$search = null}}
 @endif
-    <!DOCTYPE html>
+        <!DOCTYPE html>
 <html lang="en">
 <head>
     <link rel="stylesheet" href="{{ asset('css/styles.css') }}">
@@ -46,11 +46,12 @@
         <tbody>
         @foreach($tasks as $task)
             <tr class="task-row">
-                <td class="fw-semibold align-middle">{{ $task->name }}</td>
-                <td class="task-description align-middle">{{ $task->description }}</td>
-                <td class="task-categories align-middle">
+                <td class="fw-semibold align-middle">{!! str_ireplace($search ,"<span class='bg-info'>".$search."</span>" ,e($task->name)) !!}</td>
+                <td class="task-description align-middle">{!! str_ireplace($search ,"<span class='bg-info'>".$search."</span>" ,e($task->description)) !!}</td>
+                <td class='task-categories align-middle'>
                     @foreach($task->categories as $TaskCat)
                         <span class="badge bg-secondary">{{ $TaskCat['name'] }}</span>
+                        <br>
                     @endforeach
                 </td>
                 <td class="align-middle">
