@@ -10,7 +10,7 @@
 <body>
 <div class="container mt-5">
     <h1 class="text-center mb-4">Edit Category</h1>
-    <form method="POST">
+    <form autocomplete="off" method="POST">
         @csrf
 
         <div class="mb-4">

@@ -11,7 +11,7 @@
 <div class="container">
     <h1>Edit Task</h1>
 
-    <form action="/edit/{{$task->id}}" method="POST">
+    <form autocomplete="off" action="/edit/{{$task->id}}" method="POST">
         @csrf
         <div class="mb-4">
             <label for="name" class="form-label">Task Name*</label>

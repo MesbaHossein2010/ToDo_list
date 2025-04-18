@@ -8,6 +8,7 @@ $baseDir = dirname($vendorDir);
 return array(
     'App\\Console\\Kernel' => $baseDir . '/app/Console/Kernel.php',
     'App\\Exceptions\\Handler' => $baseDir . '/app/Exceptions/Handler.php',
+    'App\\Http\\Controllers\\AuthController' => $baseDir . '/app/Http/Controllers/AuthController.php',
     'App\\Http\\Controllers\\CategoryController' => $baseDir . '/app/Http/Controllers/CategoryController.php',
     'App\\Http\\Controllers\\Controller' => $baseDir . '/app/Http/Controllers/Controller.php',
     'App\\Http\\Controllers\\ToDoController' => $baseDir . '/app/Http/Controllers/ToDoController.php',
@@ -24,6 +25,8 @@ return array(
     'App\\Http\\Middleware\\VerifyCsrfToken' => $baseDir . '/app/Http/Middleware/VerifyCsrfToken.php',
     'App\\Http\\Requests\\CatStoreRequest' => $baseDir . '/app/Http/Requests/CatStoreRequest.php',
     'App\\Http\\Requests\\CatUpdateRequest' => $baseDir . '/app/Http/Requests/CatUpdateRequest.php',
+    'App\\Http\\Requests\\LoginRequest' => $baseDir . '/app/Http/Requests/LoginRequest.php',
+    'App\\Http\\Requests\\RegisterRequest' => $baseDir . '/app/Http/Requests/RegisterRequest.php',
     'App\\Http\\Requests\\SearchRequest' => $baseDir . '/app/Http/Requests/SearchRequest.php',
     'App\\Http\\Requests\\StoreRequest' => $baseDir . '/app/Http/Requests/StoreRequest.php',
     'App\\Http\\Requests\\UpdateRequest' => $baseDir . '/app/Http/Requests/UpdateRequest.php',

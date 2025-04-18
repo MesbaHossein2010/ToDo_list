@@ -73,4 +73,6 @@ Route::prefix('/auth')->group(function () {
     Route::post('/register', [AuthController::class, 'register']);
     Route::get('/logout', [AuthController::class, 'logout'])->name('auth.logout');
 });
+Route::get('/login', function () {return redirect()->route('auth.login');});
+Route::get('/register', function () {return redirect()->route('auth.register');});
 //end auth

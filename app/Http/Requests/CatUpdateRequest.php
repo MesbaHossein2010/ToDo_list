@@ -22,8 +22,8 @@ class CatUpdateRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'name' => 'required|string|max:100',
-            'tasks' => 'required|array|min:1',
+            'name' => 'required|string|max:100|unique:categories,name',
+            'tasks' => 'required|array|min:1|exists:tasks,id',
         ];
     }
 }
