@@ -23,32 +23,35 @@ use App\Http\Controllers\ToDoController;
 //tasks
 Route::get('/', [ToDoController::class, 'index'])->name('index');
 
-Route::get('/create', [ToDoController::class, 'create']);
-Route::post('/create', [ToDoController::class, 'store']);
+Route::group(['middleware' => 'auth'], function () {
+    Route::get('/create', [ToDoController::class, 'create']);
+    Route::post('/create', [ToDoController::class, 'store']);
 
-Route::get('/edit/{id}', [ToDoController::class, 'edit'])->where('id', '[0-9]+');
-Route::post('/edit/{id}', [ToDoController::class, 'update']);
+    Route::get('/edit/{id}', [ToDoController::class, 'edit'])->where('id', '[0-9]+');
+    Route::post('/edit/{id}', [ToDoController::class, 'update']);
 
-Route::get('/delete/{id}', [ToDoController::class, 'destroy'])->where('id', '[0-9]+');
+    Route::get('/delete/{id}', [ToDoController::class, 'destroy'])->where('id', '[0-9]+');
 
-Route::get('/complete/{id}', [ToDoController::class, 'complete'])->where('id', '[0-9]+');
+    Route::get('/complete/{id}', [ToDoController::class, 'complete'])->where('id', '[0-9]+');
+});
 
 Route::post('/', [ToDoController::class, 'search']);
 //tasks end
 
 //settings
-Route::get('/d', [ToDoController::class, 'd']);
-Route::get('/dd', [CategoryController::class, 'd'])->name('dd');
+Route::group(['middleware' => 'auth'], function () {
+    Route::get('/d', [ToDoController::class, 'd']);
+    Route::get('/dd', [CategoryController::class, 'd'])->name('dd');
 
-Route::get('/c/{num}', [TaskSeeder::class, 'run'])->where('num', '[0-9]+');
-Route::get('/cc/{num}', [CategorySeeder::class, 'run'])->where('num', '[0-9]+')->name('cc');
-Route::get('/ccc', [Category_taskSeeder::class, 'run'])->name('ccc');
+    Route::get('/c/{num}', [TaskSeeder::class, 'run'])->where('num', '[0-9]+');
+    Route::get('/cc/{num}', [CategorySeeder::class, 'run'])->where('num', '[0-9]+')->name('cc');
+    Route::get('/ccc', [Category_taskSeeder::class, 'run'])->name('ccc');
+    Route::get('/test', [ToDoController::class, 'test']);
+});
 
 Route::fallback(function () {
     return view('fallback');
 });
-
-Route::get('/test', [ToDoController::class, 'test']);
 //settings end
 
 //categories
@@ -62,17 +65,21 @@ Route::prefix('/categories')->group(function () {
     Route::post('/edit/{id}', [CategoryController::class, 'update'])->where('id', '[0-9]+');
 
     Route::get('/delete/{id}', [CategoryController::class, 'destroy'])->where('id', '[0-9]+');
-});
+})->middleware('auth');
 //categories end
 
 //auth
 Route::prefix('/auth')->group(function () {
-    Route::get('/login', [AuthController::class, 'showLogin'])->name('auth.login');
-    Route::post('/login', [AuthController::class, 'login']);
-    Route::get('/register', [AuthController::class, 'showRegister'])->name('auth.register');
-    Route::post('/register', [AuthController::class, 'register']);
+    Route::get('/login', [AuthController::class, 'showLogin']);
+    Route::post('/login', [AuthController::class, 'login'])->name('auth.login');
+    Route::get('/register', [AuthController::class, 'showRegister']);
+    Route::post('/register', [AuthController::class, 'register'])->name('auth.register');
     Route::get('/logout', [AuthController::class, 'logout'])->name('auth.logout');
 });
-Route::get('/login', function () {return redirect()->route('auth.login');});
-Route::get('/register', function () {return redirect()->route('auth.register');});
+Route::get('/login', function () {
+    return redirect()->route('auth.login');
+});
+Route::get('/register', function () {
+    return redirect()->route('auth.register');
+});
 //end auth

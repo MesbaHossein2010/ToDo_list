@@ -1,7 +1,16 @@
 @if(!isset($search))
 {{$search = null}}
 @endif
-        <!DOCTYPE html>
+@if(session('token') !== null)
+@php(
+$login = true
+)
+@else
+@php(
+$login = false
+)
+@endif
+    <!DOCTYPE html>
 <html lang="en">
 <head>
     <link rel="stylesheet" href="{{ asset('css/styles.css') }}">
@@ -20,6 +29,8 @@
 
     <div class="mb-3">
         <strong>Number of tasks: {{ count($tasks) }}</strong>
+        <br>
+        <h2 style="background: {{$login?'green':'red'}}; color: white; text-align: center">{{$login?'Access granted':'Access denied. Please login'}}</h2>
     </div>
 
     <form class="search-form" action="" method="post" autocomplete="off">
@@ -40,7 +51,9 @@
             <th>Description</th>
             <th>Categories</th>
             <th>Status</th>
-            <th>Actions</th>
+            @if($login)
+                <th>Actions</th>
+            @endif
         </tr>
         </thead>
         <tbody>
@@ -59,14 +72,16 @@
                 {{ $task->status == 'not completed' ? 'Not completed' : 'Completed!' }}
             </span>
                 </td>
-                <td class="task-actions align-middle">
-                    <a href="/edit/{{ $task->id }}" class="btn btn-sm btn-warning">Edit</a>
-                    <a href="/delete/{{ $task->id }}" class="btn btn-sm btn-danger">Delete</a>
-                    <a href="/complete/{{ $task->id }}"
-                       class="btn btn-sm btn-{{ $task->status == 'completed' ? 'info' : 'success' }}">
-                        {{ $task->status == 'completed' ? 'Undo' : 'Complete' }}
-                    </a>
-                </td>
+                @if($login)
+                    <td class="task-actions align-middle">
+                        <a href="/edit/{{ $task->id }}" class="btn btn-sm btn-warning">Edit</a>
+                        <a href="/delete/{{ $task->id }}" class="btn btn-sm btn-danger">Delete</a>
+                        <a href="/complete/{{ $task->id }}"
+                           class="btn btn-sm btn-{{ $task->status == 'completed' ? 'info' : 'success' }}">
+                            {{ $task->status == 'completed' ? 'Undo' : 'Complete' }}
+                        </a>
+                    </td>
+                @endif
             </tr>
         @endforeach
         </tbody>
