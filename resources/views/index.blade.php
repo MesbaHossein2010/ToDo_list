@@ -1,15 +1,13 @@
 @if(!isset($search))
-{{$search = null}}
+{{ $search = null }}
 @endif
+
 @if(session('token') !== null)
-@php(
-$login = true
-)
+@php($login = true)
 @else
-@php(
-$login = false
-)
+@php($login = false)
 @endif
+
     <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -22,27 +20,39 @@ $login = false
 <body>
 <div class="container">
     <h1>My To-Do List</h1>
-    <div class="d-flex justify-content-between mb-4">
-        <a href="/create" class="btn btn-primary">Add New Task</a>
-        <a href="/categories" class="btn btn-primary">categories</a>
+
+    <div class="auth-buttons d-flex justify-content-end gap-2 mb-3">
+        @if(!$login)
+            <a href="/login" style="text-align: left" class="btn btn-outline-primary">Login</a>
+            <a href="/register" style="text-align: left" class="btn btn-outline-success">Register</a>
+        @else
+            <button onclick="location.href='/logout';" type="button" class="btn btn-outline-danger">Logout</button>
+        @endif
     </div>
 
-    <div class="mb-3">
-        <strong>Number of tasks: {{ count($tasks) }}</strong>
-        <br>
-        <h2 style="background: {{$login?'green':'red'}}; color: white; text-align: center">{{$login?'Access granted':'Access denied. Please login'}}</h2>
-    </div>
+    <a href="/create" class="btn btn-primary">Add New Task</a>
+    <a href="/categories" class="btn btn-primary">Categories</a>
+    <br>
+    <br>
 
     <form class="search-form" action="" method="post" autocomplete="off">
         @csrf
         <div class="input-group">
             <input type="text" class="form-control" placeholder="Search tasks..." name="search" value="{{ $search }}">
             <button type="submit" class="btn btn-primary">Search</button>
-            @if($search != null)
+        @if($search != null)
                 <button type="button" class="btn btn-danger" onclick="location.href='/';">Cancel</button>
             @endif
         </div>
     </form>
+
+    <div class="mb-3">
+        <strong>Number of tasks: {{ count($tasks) }}</strong>
+        <br>
+        <h2 style="background: {{ $login ? 'green' : 'red' }}; color: white; text-align: center">
+            {{ $login ? 'Access granted' : 'Access denied. Please login' }}
+        </h2>
+    </div>
 
     <table class="table table-striped">
         <thead>
@@ -59,18 +69,17 @@ $login = false
         <tbody>
         @foreach($tasks as $task)
             <tr class="task-row">
-                <td class="fw-semibold align-middle">{!! str_ireplace($search ,"<span class='bg-info'>".$search."</span>" ,e($task->name)) !!}</td>
-                <td class="task-description align-middle">{!! str_ireplace($search ,"<span class='bg-info'>".$search."</span>" ,e($task->description)) !!}</td>
+                <td class="fw-semibold align-middle">{!! str_ireplace($search, "<span class='bg-info'>".$search."</span>", e($task->name)) !!}</td>
+                <td class="task-description align-middle">{!! str_ireplace($search, "<span class='bg-info'>".$search."</span>", e($task->description)) !!}</td>
                 <td class='task-categories align-middle'>
                     @foreach($task->categories as $TaskCat)
-                        <span class="badge bg-secondary">{{ $TaskCat['name'] }}</span>
-                        <br>
+                        <span class="badge bg-secondary">{{ $TaskCat['name'] }}</span><br>
                     @endforeach
                 </td>
                 <td class="align-middle">
-            <span class="badge bg-{{ $task->status == 'not completed' ? 'info' : 'success' }}">
-                {{ $task->status == 'not completed' ? 'Not completed' : 'Completed!' }}
-            </span>
+                    <span class="badge bg-{{ $task->status == 'not completed' ? 'info' : 'success' }}">
+                        {{ $task->status == 'not completed' ? 'Not completed' : 'Completed!' }}
+                    </span>
                 </td>
                 @if($login)
                     <td class="task-actions align-middle">
@@ -87,6 +96,7 @@ $login = false
         </tbody>
     </table>
 </div>
+
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

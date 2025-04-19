@@ -59,5 +59,6 @@ class AuthController extends Controller
     public function logout()
     {
         session()->forget('token');
+        return redirect()->route('index');
     }
 }
