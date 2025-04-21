@@ -15,9 +15,10 @@ class CheckAuth
      */
     public function handle(Request $request, Closure $next): Response
     {
-        if(session()->has('user')){
+        if(session()->has('token')){
             return $next($request);
         }
-        abort(403);
+
+        return redirect()->route('auth.showLogin')->withErrors(['403' => 'please login first']);
     }
 }

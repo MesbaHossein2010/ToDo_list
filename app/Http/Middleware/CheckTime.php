@@ -20,7 +20,7 @@ class CheckTime
 
         $hour = $now->hour;
 
-        if ($hour >= 10 && $hour < 20) {
+        if ($hour >= 10 && $hour < 22) {
             return $next($request);
         }
 

@@ -27,4 +27,16 @@ class RegisterRequest extends FormRequest
             'password' => 'required|string|min:6|confirmed',
         ];
     }
+    public function messages()
+    {
+        return [
+            'username.required' => 'Username is required!',
+            'username.unique' => 'Username is used!',
+            'email.required' => 'Email is required!',
+            'email.unique' => 'Email is used!',
+            'password.required' => 'Password cannot be empty.',
+            'password.min'      => 'Password must be at least 6 characters.',
+            'password.confirmed'      => 'Password and confirmation does not match.',
+        ];
+    }
 }

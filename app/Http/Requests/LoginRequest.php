@@ -26,4 +26,11 @@ class LoginRequest extends FormRequest
             'password' => 'required|string',
         ];
     }
+    public function messages()
+    {
+        return [
+            'username.required' => 'Username is required!',
+            'password.required' => 'Password cannot be empty.',
+        ];
+    }
 }

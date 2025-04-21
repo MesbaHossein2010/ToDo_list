@@ -11,10 +11,19 @@
     <h2>Register</h2>
     <form action="{{ route('auth.register') }}" method="POST" autocomplete="off">
         @csrf
-        <input type="text" name="username" placeholder="Username" required/>
-        <input type="email" name="email" placeholder="Email" required/>
-        <input type="password" name="password" placeholder="Password" required/>
+        <input type="text" name="username" placeholder="Username" value="{{ old('username') }}" required/>
+        @error('username')
+        <strong style="color: red;" >{{$message}}</strong>
+        @enderror
+        <input type="email" name="email" placeholder="Email" value="{{ old('email') }}" required/>
+        @error('email')
+        <strong style="color: red;" >{{$message}}</strong>
+        @enderror
+        <input type="password" name="password" placeholder="Password" value="{{ old('password') }}" required/>
         <input type="password" name="password_confirmation" placeholder="Confirm Password" required/>
+        @error('password')
+        <strong style="color: red;" >{{$message}}</strong>
+        @enderror
         <button type="submit">Register</button>
     </form>
     <div class="form-footer">

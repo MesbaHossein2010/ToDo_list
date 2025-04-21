@@ -15,7 +15,6 @@ class CategoryController extends Controller
      */
     public function index()
     {
-        dd(8765432);
         $categories = Category::orderBy('name')->where('deleted_at', null)->get();
         return view('category.index', compact('categories'));
     }
