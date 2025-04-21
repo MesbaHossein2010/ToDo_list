@@ -39,7 +39,7 @@ class Kernel extends HttpKernel
             \Illuminate\View\Middleware\ShareErrorsFromSession::class,
             \App\Http\Middleware\VerifyCsrfToken::class,
             \Illuminate\Routing\Middleware\SubstituteBindings::class,
-            CheckAuth::class,
+            'CheckAuth' => \App\Http\Middleware\CheckAuth::class,
         ],
 
         'api' => [
