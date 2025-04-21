@@ -6,7 +6,7 @@ use Closure;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
 
-class Auth
+class CheckAuth
 {
     /**
      * Handle an incoming request.
@@ -15,7 +15,7 @@ class Auth
      */
     public function handle(Request $request, Closure $next): Response
     {
-        if(session()->has('token')){
+        if(session()->has('user')){
             return $next($request);
         }
         abort(403);

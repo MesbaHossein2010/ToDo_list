@@ -24,7 +24,7 @@ use Database\Seeders\Category_taskSeeder;
 Route::get('/', [ToDoController::class, 'index'])->name('index');
 Route::post('/', [ToDoController::class, 'search']);
 
-Route::middleware('Auth')->group(function () {
+Route::middleware('CheckAuth')->group(function () {
     Route::get('/create', [ToDoController::class, 'create']);
     Route::post('/create', [ToDoController::class, 'store']);
 
@@ -38,7 +38,7 @@ Route::middleware('Auth')->group(function () {
 // -------------------------
 // ⚙️ Settings & Seeders (dev/test only)
 // -------------------------
-Route::middleware('Auth')->group(function () {
+Route::middleware('CheckAuth')->group(function () {
     Route::get('/d', [ToDoController::class, 'd']);
     Route::get('/dd', [CategoryController::class, 'd'])->name('dd');
 
@@ -52,7 +52,7 @@ Route::middleware('Auth')->group(function () {
 // -------------------------
 // 🗂️ Categories
 // -------------------------
-Route::prefix('/categories')->middleware('Auth')->group(function () {
+Route::prefix('/categories')->middleware('CheckAuth')->group(function () {
     Route::get('/', [CategoryController::class, 'index'])->name('category.index');
 
     Route::get('/create', [CategoryController::class, 'create']);
