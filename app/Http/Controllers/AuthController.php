@@ -18,13 +18,16 @@ class AuthController extends Controller
 
     public function login(LoginRequest $request)
     {
-        $credentials = $request->only('username', 'password');
+        $username = $request->input('username');
+        $password = $request->input('password');
+        $credentials = ['username' => $username, 'password' => $password];
 
         if (Auth::attempt($credentials)) {
             $user = Auth::user();
             $token = $user->createToken('webToken')->accessToken;
 
             session(['token' => $token]);
+            session(['user' => $username]);
 
             return redirect()->route('index');
         }
@@ -52,13 +55,16 @@ class AuthController extends Controller
 
         $token = $user->createToken('webToken')->accessToken;
         session(['token' => $token]);
+        session(['user' => $username]);
 
         return redirect()->route('index');
     }
 
     public function logout()
     {
+        Auth::logout();
         session()->forget('token');
+        session()->forget('user');
         return redirect()->route('index');
     }
 }

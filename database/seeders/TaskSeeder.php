@@ -13,10 +13,8 @@ class TaskSeeder extends Seeder
     /**
      * Run the database seeds.
      */
-    public function run(int $num)
+    public function run()
     {
-        Log::info($num);
-        Task::factory()->count($num)->create();
-        return redirect()->route('c');
+        Task::factory()->count(100)->create();
     }
 }

@@ -21,7 +21,5 @@ class Category_taskSeeder extends Seeder
                 'task_id' => rand(1, Task::all()->count()),
             ]);
         }
-
-        return redirect()->route('c');
     }
 }

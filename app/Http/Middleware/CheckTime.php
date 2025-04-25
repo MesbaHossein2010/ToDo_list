@@ -20,10 +20,10 @@ class CheckTime
 
         $hour = $now->hour;
 
-        if ($hour >= 10 && $hour < 22) {
+        if ($hour >= 10 && $hour < 20) {
             return $next($request);
         }
 
-        abort(403);
+        abort(403, 'Your access time is up');
     }
 }

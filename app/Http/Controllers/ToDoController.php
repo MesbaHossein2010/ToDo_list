@@ -10,6 +10,7 @@ use App\Models\Phone;
 use App\Models\Task;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
 
@@ -17,12 +18,24 @@ class ToDoController extends Controller
 {
     /**
      * Display a listing of the resource.
+     * @noinspection PhpUndefinedFieldInspection
      */
     public function index()
     {
-        $tasks = Task::orderBy('name')->where('deleted_at', null)->get();
-        return view('index', compact('tasks'));
-//        $tasks = DB::table("tasks")->get();
+        $user = Auth::user();
+
+        $query = Task::whereNull('deleted_at');
+
+        // If user is logged in, prioritize their tasks
+        if ($user) {
+            $query->orderByRaw("CASE WHEN user_id = ? THEN 0 ELSE 1 END", [$user->id]);
+            $user = Auth::user()->username;
+        }
+
+        // Always order by name
+        $tasks = $query->orderBy('name')->get();
+
+        return view('index', compact('tasks', 'user'));
     }
 
     /**
@@ -45,7 +58,8 @@ class ToDoController extends Controller
 
         $task = Task::create([
             'name' => $name,
-            'description' => $description
+            'description' => $description,
+            'user_id' => Auth::id()
         ]);
 
         $task->categories()->attach($categories);
@@ -66,11 +80,6 @@ class ToDoController extends Controller
         } else {
             return redirect()->route('index');
         }
-
-//        $task = DB::table('tasks')->select('*')->where('id', $id)->get();
-//        $task = $task[0];
-//        return view('edit', compact('task'));
-
     }
 
     /**
@@ -123,13 +132,23 @@ class ToDoController extends Controller
     public function search(SearchRequest $request)
     {
         $search = $request->input('search');
-        $tasks = Task::where('name', 'like', '%' . $search . '%')
-            ->orWhere('description', 'like', '%' . $search . '%')
-            ->get();
+        $user = Auth::user();
 
-//        $tasks = DB::table("tasks")->where('name', 'like', '%' . $search . '%')->get();
+        $query = Task::whereNull('deleted_at')
+            ->where(function($q) use ($search) {
+                $q->where('name', 'like', '%' . $search . '%')
+                    ->orWhere('description', 'like', '%' . $search . '%');
+            });
 
-        return view('index', compact('tasks', 'search'));
+        // If user is logged in, prioritize their tasks in search results too
+        if ($user) {
+            $query->orderByRaw("CASE WHEN user_id = ? THEN 0 ELSE 1 END", [$user->id]);
+            $user = Auth::user()->username;
+        }
+
+        $tasks = $query->orderBy('name')->get();
+
+        return view('index', compact('tasks', 'user', 'search'));
     }
 
     public function d()
@@ -137,6 +156,7 @@ class ToDoController extends Controller
         Task::query()->truncate();
         Category::query()->truncate();
         User::query()->truncate();
+        DB::table('category_task')->truncate();
 
         return redirect()->route('index');
     }

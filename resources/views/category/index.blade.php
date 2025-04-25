@@ -1,3 +1,6 @@
+@if(!isset($user))
+{{ $user = false }}
+@endif
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -20,6 +23,7 @@
         <tr>
             <th>Name</th>
             <th>Tasks</th>
+            <th>user</th>
             <th>Actions</th>
         </tr>
         </thead>
@@ -37,11 +41,16 @@
                     <br>
                 </td>
                 <td>
+                    {{ $category->user->username }}
+                </td>
+                @if($user == $category->user->username)
+                <td>
                     <div class="d-flex gap-2">
                         <a href="/categories/edit/{{ $category->id }}" class="btn btn-sm btn-warning">Edit</a>
                         <a href="/categories/delete/{{ $category->id }}" class="btn btn-sm btn-danger">Delete</a>
                     </div>
                 </td>
+                @endif
             </tr>
         @endforeach
         </tbody>

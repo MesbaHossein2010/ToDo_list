@@ -3,6 +3,7 @@
 namespace Database\Seeders;
 
 use App\Models\Category;
+use App\Models\Task;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
@@ -11,9 +12,8 @@ class CategorySeeder extends Seeder
     /**
      * Run the database seeds.
      */
-    public function run($num)
+    public function run()
     {
-        Category::factory()->count($num/5)->create();
-        return redirect()->route('c');
+        Category::factory()->count(Task::all()->count()/5)->create();
     }
 }

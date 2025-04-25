@@ -1,13 +1,9 @@
 @if(!isset($search))
 {{ $search = null }}
 @endif
-
-@if(session('token') !== null)
-@php($login = true)
-@else
-@php($login = false)
+@if(!isset($user))
+{{ $user = false }}
 @endif
-
     <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -22,7 +18,7 @@
     <h1>My To-Do List</h1>
 
     <div class="auth-buttons d-flex justify-content-end gap-2 mb-3">
-        @if(!$login)
+        @if(!$user)
             <a href="/login" style="text-align: left" class="btn btn-outline-primary">Login</a>
             <a href="/register" style="text-align: left" class="btn btn-outline-success">Register</a>
         @else
@@ -49,8 +45,8 @@
     <div class="mb-3">
         <strong>Number of tasks: {{ count($tasks) }}</strong>
         <br>
-        <h2 style="background: {{ $login ? 'green' : 'red' }}; color: white; text-align: center">
-            {{ $login ? 'Access granted' : 'Access denied. Please login' }}
+        <h2 style="background: {{ $user ? 'green' : 'red' }}; color: white; text-align: center">
+            {{ $user ? 'Access granted' : 'Access denied. Please login' }}
         </h2>
     </div>
 
@@ -60,8 +56,9 @@
             <th>Task Name</th>
             <th>Description</th>
             <th>Categories</th>
+            <th>user</th>
             <th>Status</th>
-            @if($login)
+            @if($user)
                 <th>Actions</th>
             @endif
         </tr>
@@ -76,12 +73,15 @@
                         <span class="badge bg-secondary">{{ $TaskCat['name'] }}</span><br>
                     @endforeach
                 </td>
+                <td>
+                    {{ $task->user->username }}
+                </td>
                 <td class="align-middle">
                     <span class="badge bg-{{ $task->status == 'not completed' ? 'info' : 'success' }}">
                         {{ $task->status == 'not completed' ? 'Not completed' : 'Completed!' }}
                     </span>
                 </td>
-                @if($login)
+                @if($user == $task->user->username)
                     <td class="task-actions align-middle">
                         <a href="/edit/{{ $task->id }}" class="btn btn-sm btn-warning">Edit</a>
                         <a href="/delete/{{ $task->id }}" class="btn btn-sm btn-danger">Delete</a>

@@ -7,6 +7,7 @@ use App\Http\Requests\CatUpdateRequest;
 use App\Models\Category;
 use App\Models\Task;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class CategoryController extends Controller
 {
@@ -15,8 +16,18 @@ class CategoryController extends Controller
      */
     public function index()
     {
-        $categories = Category::orderBy('name')->where('deleted_at', null)->get();
-        return view('category.index', compact('categories'));
+        $user = Auth::user();
+        if($user){
+            $categories = Category::orderByRaw("CASE WHEN user_id = ? THEN 0 ELSE 1 END", [$user->id])
+                ->orderBy('name')
+                ->where('deleted_at', null)
+                ->get();
+            $user = Auth::user()->username;
+            return view('category.index', compact('categories', 'user'));
+        }else{
+            $categories = Category::orderBy('name')->where('deleted_at', null)->get();
+            return view('category.index', compact('categories'));
+        }
     }
 
     /**
@@ -35,10 +46,11 @@ class CategoryController extends Controller
     {
         $name = $request->input('name');
         $tasks = $request->input('tasks');
-//        dd($tasks);
 
         $cat = Category::create([
             'name' => $name,
+            'tasks' => $tasks,
+            'user_id' => Auth::id(),
         ]);
 
         $cat->tasks()->sync($tasks);
