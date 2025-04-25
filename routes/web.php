@@ -1,5 +1,7 @@
 <?php
 
+use Database\Seeders\AutoSeeder;
+use Database\Seeders\UserSeeder;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ToDoController;
 use App\Http\Controllers\CategoryController;
@@ -42,9 +44,11 @@ Route::middleware('CheckAuth')->group(function () {
     Route::get('/d', [ToDoController::class, 'd']);
     Route::get('/dd', [CategoryController::class, 'd'])->name('dd');
 
-    Route::get('/c/{num}', [TaskSeeder::class, 'run'])->where('num', '[0-9]+');
+    Route::get('/c/{num?}', [AutoSeeder::class, 'run'])->where('num', '[0-9]+')->name('c');
+    Route::get('/cu/{num}', [UserSeeder::class, 'run'])->where('num', '[0-9]+')->name('cu');
+    Route::get('/ct/{num}', [TaskSeeder::class, 'run'])->where('num', '[0-9]+')->name('ct');
     Route::get('/cc/{num}', [CategorySeeder::class, 'run'])->where('num', '[0-9]+')->name('cc');
-    Route::get('/ccc', [Category_taskSeeder::class, 'run'])->name('ccc');
+    Route::get('/cct', [Category_taskSeeder::class, 'run'])->name('cct');
 
     Route::get('/test', [ToDoController::class, 'test']);
 });

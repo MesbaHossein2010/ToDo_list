@@ -2,18 +2,17 @@
 
 namespace Database\Seeders;
 
-use App\Models\Category;
+use App\Models\User;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
-class CategorySeeder extends Seeder
+class UserSeeder extends Seeder
 {
     /**
      * Run the database seeds.
      */
-    public function run($num)
-    {
-        Category::factory()->count($num/5)->create();
+    public function run($num)    {
+        User::factory()->count($num)->create();
         return redirect()->route('c');
     }
 }

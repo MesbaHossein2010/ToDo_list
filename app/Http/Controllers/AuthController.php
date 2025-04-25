@@ -30,7 +30,7 @@ class AuthController extends Controller
         }
 
         $error = 'Invalid username or password';
-        return view('auth.login', compact('error'));
+        return redirect()->route('auth.login')->withErrors(['403' => $error]);
     }
 
     public function showRegister()

@@ -17,6 +17,9 @@
             <label for="name" class="form-label">Category Name*</label>
             <input value="{{ $category->name }}" type="text" class="form-control" id="name" name="name" required>
         </div>
+        @error('name')
+        <strong style="color: red;">{{$message}}</strong>
+        @enderror
 
         <div class="mb-4">
             <label class="form-label">Tasks</label>
@@ -34,6 +37,9 @@
                 @endforeach
             </div>
         </div>
+        @error('tasks')
+        <strong style="color: red;">{{$message}}</strong>
+        @enderror
 
         <div class="d-flex justify-content-between mt-5">
             <a href="/categories" class="btn btn-outline-secondary">Cancel</a>

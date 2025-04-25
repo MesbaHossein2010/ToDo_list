@@ -86,10 +86,4 @@ class CategoryController extends Controller
         $category->save();
         return redirect()->back();
     }
-    public function d()
-    {
-        Category::query()->truncate();
-
-        return redirect()->route('index');
-    }
 }

@@ -26,4 +26,14 @@ class CatUpdateRequest extends FormRequest
             'tasks' => 'required|array|min:1|exists:tasks,id',
         ];
     }
+    public function messages(): array
+    {
+        return [
+            'name.required' => 'Name cannot be empty.',
+            'name.max' => 'Name cannot be longer than 100 characters.',
+            'name.unique' => 'Name already exists.',
+            'tasks.required' => 'Tasks cannot be empty.',
+            'tasks.exists' => 'Tasks does not exist.',
+        ];
+    }
 }

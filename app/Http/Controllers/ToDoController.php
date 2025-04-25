@@ -135,8 +135,10 @@ class ToDoController extends Controller
     public function d()
     {
         Task::query()->truncate();
+        Category::query()->truncate();
+        User::query()->truncate();
 
-        return redirect()->route('dd');
+        return redirect()->route('index');
     }
 
     public function test()

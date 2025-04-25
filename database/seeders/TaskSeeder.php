@@ -17,6 +17,6 @@ class TaskSeeder extends Seeder
     {
         Log::info($num);
         Task::factory()->count($num)->create();
-        return redirect()->route('cc', ['num' => $num]);
+        return redirect()->route('c');
     }
 }

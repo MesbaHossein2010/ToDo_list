@@ -18,11 +18,17 @@
             <label for="name" class="form-label">Task Name*</label>
             <input type="text" class="form-control" id="name" name="name" required>
         </div>
+        @error('name')
+        <strong style="color: red;">{{$message}}</strong>
+        @enderror
 
         <div class="mb-4">
             <label for="description" class="form-label">Description</label>
             <textarea class="form-control" id="description" name="description" rows="4"></textarea>
         </div>
+        @error('description')
+        <strong style="color: red;">{{$message}}</strong>
+        @enderror
 
         <div class="mb-4">
             <label class="form-label">Categories</label>
@@ -39,6 +45,9 @@
                 @endforeach
             </div>
         </div>
+        @error('categories')
+        <strong style="color: red;">{{$message}}</strong>
+        @enderror
 
         <div class="d-flex justify-content-between mt-5">
             <a href="/" class="btn btn-outline-secondary">Cancel</a>

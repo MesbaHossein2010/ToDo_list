@@ -22,6 +22,6 @@ class Category_taskSeeder extends Seeder
             ]);
         }
 
-        return redirect()->route('index');
+        return redirect()->route('c');
     }
 }
