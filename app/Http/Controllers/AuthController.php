@@ -18,23 +18,18 @@ class AuthController extends Controller
 
     public function login(LoginRequest $request)
     {
-        $username = $request->input('username');
-        $password = $request->input('password');
-        $credentials = ['username' => $username, 'password' => $password];
+        $credentials = $request->only('username', 'password');
 
         if (Auth::attempt($credentials)) {
-            $user = Auth::user();
-            $token = $user->createToken('webToken')->accessToken;
-
-            session(['token' => $token]);
-            session(['user' => $username]);
-
-            return redirect()->route('index');
+            $request->session()->regenerate();  // Security: regenerate session after login
+            return redirect()->route('index');  // Redirect to the index page (dashboard, etc.)
         }
 
-        $error = 'Invalid username or password';
-        return redirect()->route('auth.login')->withErrors(['403' => $error]);
+        return redirect()->route('auth.login')->withErrors([
+            'username' => 'Invalid username or password',
+        ]);
     }
+
 
     public function showRegister()
     {
@@ -43,22 +38,20 @@ class AuthController extends Controller
 
     public function register(RegisterRequest $request)
     {
-        $username = $request->input('username');
-        $email = $request->input('email');
-        $password = $request->input('password');
-
         $user = User::create([
-            'username' => $username,
-            'email' => $email,
-            'password' => Hash::make($password),
+            'username' => $request->input('username'),
+            'email' => $request->input('email'),
+            'password' => Hash::make($request->input('password')),
         ]);
 
-        $token = $user->createToken('webToken')->accessToken;
-        session(['token' => $token]);
-        session(['user' => $username]);
+        // Automatically log the user in after registration
+        Auth::login($user);
+
+        $request->session()->regenerate();  // Regenerate session for security
 
         return redirect()->route('index');
     }
+
 
     public function logout()
     {

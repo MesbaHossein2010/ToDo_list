@@ -15,7 +15,8 @@ class CheckAuth
      */
     public function handle(Request $request, Closure $next): Response
     {
-        if(session()->has('token')){
+        $user = $request->user();
+        if($user){
             return $next($request);
         }
 
